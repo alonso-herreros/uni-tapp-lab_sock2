@@ -1,4 +1,4 @@
-[English version] (https://gitlab.pervasive.it.uc3m.es/aptel/sockets2_concurrent_servers/blob/master/README_EN.md)
+[English version](README_EN.md)
 
 # Servidores concurrentes con el API de sockets
 
@@ -23,12 +23,12 @@ conexiones que se van recibiendo.
 
 Como se puede ver en la Figura 1, un proceso tiene su propia zona de memoria, mientras que los hilos de ejecución (threads) comparten la misma zona de memoria y los recursos1. La elección de uno u otro depende de las ventajas y desventajas que aportan cada uno de ellos, pero pueden ser usados indistintamente (por ejemplo, en esta práctica utilizaremos procesos, pero podríamos utilizar hilos). 
 
-<img src="https://gitlab.pervasive.it.uc3m.es/aptel/sockets2_concurrent_servers/raw/master/img/process.png" width="500px">
+<img src="img/process.png" width="500px">
 
 En esta práctica dispone de todos los ficheros necesarios para probar un servidor concurrente. Para descargarlo, usa el siguiente comando:
 
  ```
- git -c http.sslVerify=false clone https://gitlab.pervasive.it.uc3m.es/aptel/sockets2_concurrent_servers.git
+ git clone https://gitlab.pervasive.it.uc3m.es/aptel/sockets2_concurrent_servers.git
  ```
 
 > Si tienes dificultades para entender qué sucede en el caso de threads o hilos:
