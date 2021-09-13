@@ -20,12 +20,12 @@ The fundamental difference with respect to sequential servers is that concurrent
 
 A process has its own memory area. So if I use a process per client, each process will have its own variables with its values. However, threads share the same memory area and resources. The election of one or the other depends on the advantages and disadvantages of each of them, but both of them can be used (for example, in this assignment we use processes, but we could have used threads).
 
-<img src="https://gitlab.pervasive.it.uc3m.es/aptel/sockets2_concurrent_servers/raw/master/img/process.png" width="500px">
+<img src="img/process.png" width="500px">
 
 The source code we will use during the entire lab assignment can be cloned from this repo in this way:
 
 ```
- git -c http.sslVerify=false clone https://gitlab.pervasive.it.uc3m.es/aptel/sockets2_concurrent_servers.git
+ git  clone https://gitlab.gast.it.uc3m.es/aptel/sockets2_concurrent_servers.git
 ```
 > If you need a quick refresh on Threads and Processes:
 
@@ -51,7 +51,7 @@ The child process (`fork()==0`) closes its reference to the passive socket descr
 Remember to clone the code using:
 
 ```
- git -c http.sslVerify=false clone https://gitlab.pervasive.it.uc3m.es/aptel/sockets2_concurrent_servers.git
+ git clone https://gitlab.gast.it.uc3m.es/aptel/sockets2_concurrent_servers.git
 ```
  
 ### 1.	Compile:
