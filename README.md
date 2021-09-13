@@ -28,7 +28,7 @@ Como se puede ver en la Figura 1, un proceso tiene su propia zona de memoria, mi
 En esta práctica dispone de todos los ficheros necesarios para probar un servidor concurrente. Para descargarlo, usa el siguiente comando:
 
  ```
- git clone https://gitlab.pervasive.it.uc3m.es/aptel/sockets2_concurrent_servers.git
+ git clone https://gitlab.gast.it.uc3m.es/aptel/sockets2_concurrent_servers.git
  ```
 
 > Si tienes dificultades para entender qué sucede en el caso de threads o hilos:
