@@ -2,7 +2,7 @@ all: threads
 
 threads: threads.c 
 
-CFLAGS=-lpthread
+CFLAGS=-pthread
 
 clean:
 	rm -f *.o threads
