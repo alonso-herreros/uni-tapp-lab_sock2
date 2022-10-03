@@ -4,8 +4,7 @@
 
 void *print_message_function( void *ptr );
 
-main()
-{
+int main() {
      pthread_t thread1, thread2;
      const char *message0 = "This is written by parent ";
      const char *message1 = "This is written by Thread 1";
