@@ -91,7 +91,7 @@ When a process is initiated, the course of its execution can be changed (pause, 
  
 There is a set of signals for which all processes show the same behaviour, and other signals for which different processes will behave differently, and there are even processes that ignore certain signals, because the probability of these signals happening is insignificant. However, there are signals that cannot be ignored, as they are common to all processes. In this assignment, we will see some of the most important (or used) signals. 
 
-### 5.	Look at the Look at the code of the new server, above, and notice the instruction immediately following the creation of the socket:
+### 5. Look at the code of the new server, above, and notice the instruction immediately following the creation of the socket:
 
 ```c
  (void) signal(SIGCHLD, reaper);
@@ -113,7 +113,7 @@ Inside the reaper function we see the system call wait3 (it is a variant of the 
 Make the following test: compile two concurrent servers, one with the call to signal and the other without it, and observe the differences between the two versions by examining the process table (with the ps x command) after a client has closed its connection.
 The ps command shows the processes in execution. The x option allows to show all the processes of the current user. 
  
-### 6.	Another very important handler is that of the SIGPIPE signal, which, in the case of sockets, indicates that the connection has been broken (it receives an RST) . The SIGPIPE handler includes the code needed to treat this exception (increment the number of observed failures, try to re-establish the connection, close auxilliary descriptors that are no longer needed etc.). It must be specified both on the client and on the server side of the protocol.
+### 6.	Another very important handler is the SIGPIPE signal, which, in the case of sockets, indicates that the connection has been broken (it receives an RST) . The SIGPIPE handler includes the code needed to treat this exception (increment the number of observed failures, try to re-establish the connection, close auxilliary descriptors that are no longer needed etc.). It must be specified both on the client and on the server side of the protocol.
 Include the SIGPIPE handler in the echo server, following the example of the SIGCHILD handler. Experiment with this modified code and note the occasions on which the execution of the handler can be observed. Note that:
 
 ```
