@@ -1,144 +1,131 @@
-[English version](README_EN.md)
+## Concurrent Servers with the sockets API
 
-# Servidores concurrentes con el API de sockets
+### Support Materials 
+* On-line man pages: socket(2), socket(7), send(2), recv(2), read(2), write(2), setsockopt(2), fcntl(2), select(2), tcp(7), ip(7).
+* Guide to using sockets by Brian "Beej" Hall
+* Tcpdump manual
+* Chapters 6, 7 y 8 of "Linux Socket Programming" by Sean Walton, Sams Publishing Co. 2001
+* Cheat Sheet file within this project
 
-### Material de soporte
--  On-line man pages: socket(2), socket(7), send(2), recv(2), read(2), write(2), setsockopt(2), fcntl(2), select(2), tcp(7), ip(7).
--  Guide to using sockets by Brian "Beej" Hall
--  Tcpdump manual
--  Chapters 6, 7 y 8 of "Linux Socket Programming" by Sean Walton, Sams Publishing Co. 2001
--  Fichero cheat sheet en proyecto anterior
+### Problem statement
 
-### Prácticas con sockets
-Descripción de las prácticas de sockets Las prácticas de sockets se dividen en tres partes:
-1. Servidores secuenciales (cliente y servidor de eco, opciones de sockets, análisis con tcpdump, servidores de ficheros)
-2. **Servidores concurrentes (procesos, hilos).**
-3. Entrada/Salida I/O (manejadores de señales, mecanismos de polling, select)
+The sockets assignment is divided into the following three parts:
+1. Sequential servers (echo client and server, socket options, analysis with tcpdump, file servers) 
+2. **Concurrent servers (processes, threads).**
+3. Input/output (signal handlers, poll, select)
 
-## Servidores concurrentes 
+## Concurrent Servers
 
-La diferencia fundamental con los servidores secuenciales es que los concurrentes arrancan un
-nuevo proceso (fork) o hilo de ejecución (pthread_create) para dar servicio a las
-conexiones que se van recibiendo.
+The fundamental difference with respect to sequential servers is that concurrent servers start a new process (using `fork()`) or thread (using `pthread_create()`) to provide a service to incoming connections. 
 
-Como se puede ver en la Figura 1, un proceso tiene su propia zona de memoria, mientras que los hilos de ejecución (threads) comparten la misma zona de memoria y los recursos1. La elección de uno u otro depende de las ventajas y desventajas que aportan cada uno de ellos, pero pueden ser usados indistintamente (por ejemplo, en esta práctica utilizaremos procesos, pero podríamos utilizar hilos). 
+A process has its own memory area. So if I use a process per client, each process will have its own variables with its values. However, threads share the same memory area and resources. The election of one or the other depends on the advantages and disadvantages of each of them, but both of them can be used (for example, in this assignment we use processes, but we could have used threads).
 
 <img src="img/process.png" width="500px">
 
-En esta práctica dispone de todos los ficheros necesarios para probar un servidor concurrente. Para descargarlo, usa el siguiente comando:
+The source code we will use during the entire lab assignment can be cloned from this repo in this way:
 
- ```
+```
+ git  clone https://gitlab.gast.it.uc3m.es/aptel/sockets2_concurrent_servers.git
+```
+> If you need a quick refresh on Threads and Processes:
+
+> Since in this assignment we are using processes instead of threads, it is key for you to find out how it works. Go to the `processes` folder, compile it (make) and execute `./processes` Look what happens to the variable test ;)
+
+> When it comes to Threads the most important functions are:
+* pthread_create() creates a new thread
+* pthread_join() makes a thread to wait for other thread completion
+* pthread_mutex_lock() (and similar ones) allows two or more threads to synchronize their access to a resource
+* pthread_exit() finish a threads execution
+
+> In the `threads` folder you can find a small program to test threads, compile and execute it `./threads` Analyze the code.
+
+One of the strategies used by high-performance servers involves distributing incoming requests among a pool of previously started servers, thus eliminating the time needed to create a thread or process. In general, TCP servers are concurrent, in order to be able to handle several clients simultaneously (and UDP servers are sequential).
+In the following, we will use the concurrent echo server (`TCPechod`) and the echo client that we compiled in the first part of the sockets assignment, that can be found in the folder `psockets2`. 
+
+To compile the file we will proceed in the same way as in the sequential servers assignment (make).
+
+From examination of the code of the concurrent server, it can be observed that after receiving a connection (whereupon the accept function returns), the TCPechod server starts a new process using the fork instruction. 
+
+The child process (`fork()==0`) closes its reference to the passive socket descriptor inherited from the parent process (`msock`), and executes the service (`TCPecho()`). The parent process, (`fork()!=0`) closes the socket descriptor ssock returned by `accept()` (to which the client is connected), and executes accept again to wait for new connections. 
+
+Remember to clone the code using:
+
+```
  git clone https://gitlab.gast.it.uc3m.es/aptel/sockets2_concurrent_servers.git
- ```
-
-> Si tienes dificultades para entender qué sucede en el caso de threads o hilos:
-
-> Puesto que en esta práctica usaremos procesos en lugar de hilos, es fundamental que comprendas cómo funcionan. En la carpeta `processes` dispones de un ejemplo de uso de procesos.  Descomprímelo, compila (make) y ejecuta ./processes. Observa qué pasa con la variable test.
-
-> Las funciones principales para gestionar los hilos son:
-* pthread_create() permite crear un nuevo hilo de ejecución.
-* pthread_join() hace que un hilo espere por otro.
-* pthread_mutex_lock() (y similares) permite que dos o más hilos accedan sincronizadamente a un recurso común.
-* pthread_exit() termina el hilo.
-
-> En la carpeta `threads` dispones de un ejemplo del uso de threads, puedes compilarlo (make) y ejecutarlo ./threads. Observa qué mensaje imprime cada hilo. 
-
-Otras estrategias que utilizan los servidores de alto rendimiento incluyen tener servidores prearrancados entre los que van distribuyendo las peticiones según van llegando, para evitar el tiempo de espera hasta que se crea el hilo o proceso. Por lo general, los servidores TCP son concurrentes, para poder servir simultáneamente a varios clietnes (y los servidores UDP secuenciales).
-
-A partir de ahora, vamos a utilizar el servidor de eco concurrente (TCPEchod) y el mismo cliente de eco de la práctica anterior (rebautizado a TCPEcho) que encontrarás en la carpeta psockets2.
-
-Para compilar el archivo haremos lo mismo que en la práctica de servidores secuenciales:
-
+```
+ 
+### 1.	Compile:
 ```
 make clean
 make
 ```
-
-Si examinas el código del servidor concurrente, verás que el servidor TCPEchod después de recibir una conexión (accept) arranca un proceso con `fork`. El proceso hijo (creado como resultado de la llamada a `fork` identificable al comprobar `fork()==0`) cierra su referencia al descriptor del socket pasivo heredado del padre (`msock`), y ejecuta el servicio `TCPechod()`. El proceso padre (que diferenciamos con `fork()!=0) cierra el descriptor del socket `asock` devuelto por `accept()` (al que está conectado el cliente), y vuelve a la ejecución de `accept()` a la espera de nuevas conexiones.
-
-### 1. Compila:
+Execute the server on port 8xxx:
 
 ```
-make clean
-make
+./TCPechod 8xxx
 ```
 
-ejecuta el servidor en el puerto 8XXX (recuerda que sumamos las tres últiamas cifras de la IP de tu máquina a 8000 para evitar colisiones entre grupos):
-
-```
-TCPechod 8xxx 
-```
-
-y en otra ventana, ejecuta el cliente:
+Execute the client in another window:
 
 ```
 ./TCPecho <server host> 8xxx
 ```
-
-y observa su comportamiento.
-
-### 2. Con tcpdump examine el tráfico con origen/destino en el puerto 8XXX, y mientras, desde otras máquina, lanza dos clientes para ver el tráfico intercambiado.
-
-### 3. ¿Observas en esta versión del servidor el problema que tenía el servidor secuencial original en el apartado 3 de la práctica anterior? ¿Por qué? Utilice el comando `netstat` para observar las conexiones establecidas y ver los estdos y puertos efímeros de las mismas. Por ejemplo:
+and observe their behaviour. 
+ 
+### 2.	Examine the traffic whose origin/destination port is 8xxx with tcpdump, while executing two clients on two different machines. 
+ 
+### 3.	With this version of the server, do you observe the problem that the original sequential server had in section 3 of the first part of the sockets assignment (sequential sockets)? Why? Use the netstat command to observe the connections that are established and to see their ephemeral states and ports. For example:
 
 ```
-netstat -tn
+netstat -tn 
 netstat -putan
 ```
+The second shows also process information. Both show the TCP connections in numerical format. 
+ 
+### 4.	With this version of the server, do you observe the problem that the original sequential server had in section 5 of the first part of the sockets assignment (sequential sockets)? Why?
 
-### 4. ¿Observa en esta versión del servidor el problema que tenía el servidor secuencial original en el apartado 5? ¿Por qué?
 
-## Señales
+## Signals
 
-Cuando un proceso es iniciado, se puede cambiar su "curso" (pausarlo, reanudarlo, cancelarlo, etc.) o un proceso padre puede ser notificado de la finalización de procesos hijos utilizando SEÑALES. Las señales permiten que los procesos se comuniquen entre si, y el kernel también pueda comunicarse con ellos.
+When a process is initiated, the course of its execution can be changed (pause, restart, cancel, etc.) or a parent process can be notified of the finalization of children processes using SIGNALS. Signals allow processes to communicate with each other, and the kernel can also communicate with them (chapters 7 and 10 (pages 225-229) of "Linux Socket Programming", Sean Walton). Signals are denoted by `SIG{NAME}`, where NAME is the name given to the signal
+ 
+There is a set of signals for which all processes show the same behaviour, and other signals for which different processes will behave differently, and there are even processes that ignore certain signals, because the probability of these signals happening is insignificant. However, there are signals that cannot be ignored, as they are common to all processes. In this assignment, we will see some of the most important (or used) signals. 
 
-Las señales son denotadas por: `SIG{NAME}`, donde es el nombre que se le da a la señal.
-
-Hay un conjunto de señales ante las cuales todos los procesos se comportan igual, otras ante las que procesos distintos se comportarán de manera distinta, e incluso habrá procesos que ignoren determinadas señales porque la probabilidad de que ocurran es insignificante. Sin embargo, hay señales que no pueden ignorarse (por ejemplo, porque terminan un proceso), ya que son comunes a todos los procesos. En esta práctica, veremos algunas de las más importantes (o usadas).
-
-### 5. Observa la línea del nuevo servidor que hay a continuación de la creación del socket: 
+### 5. Look at the code of the new server, above, and notice the instruction immediately following the creation of the socket:
 
 ```c
  (void) signal(SIGCHLD, reaper);
 ```
 
-y la función a la que hace referencia:
+and also the function to which it refers:
 
 ```c
 void reaper(int sig){
-  int status;
-  while (wait3(&status, WNOHANG, (struct rusage *)0) > 0)
-} 
+   int status;
+   while (wait3(&status, WNOHANG, (struct rusage *)0) >= 0)
+}
 ```
 
-el cliente:
+This is a handler for the `SIGCHILD` signal (sent by the system to indicate to the parent process that one of its child processes has terminated). 
+The signal function registers the handler so that when the `SIGCHILD` signal is received the handler is executed. The handler enables the system to free all the resources that the child process was using. In the case where a parent process does not catch a terminated child process' signal, the child process remains in the zombie state.
+Inside the reaper function we see the system call wait3 (it is a variant of the wait call), that allows to block the server until the child process dies, but WNOHANG allows to specify that wait3 should not block waiting for a process to finish. In this way, it avoids that a wrong call blocks the server ("UNIX Network Programming, Volume 1, Second Edition: Networking APIs: Sockets and XTI").
 
-Esto es un manejador (handler) de la señal `SIGCHILD`, que se ejecuta cuando dicha señal
-es recibida. SIGCHILD es una señal que lanza el sistema para indicar al proceso padre
-que un hijo ha terminado. La función signal registra el manejador de forma que cuando se
-reciba esta señal, se ejecute el manejador. El manejador permite que el sistema libere
-todos los recursos que tiene el proceso hijo. Cuando uno de los procesos hijos muere, se
-queda en estado zombie hasta que el padre recoja la señal SIGCHILD. La función reaper
-permite que esto se realice sin bloquear al proceso padre mediante la llamada wait3 (es
-una variante de la llamada wait), y mediante WNOHANG, controlamos el caso de que algún
-proceso reciba una señal que no vaya destinada a él (porque no la haya generado uno de
-sus procesos hijos). 
+Make the following test: compile two concurrent servers, one with the call to signal and the other without it, and observe the differences between the two versions by examining the process table (with the ps x command) after a client has closed its connection.
+The ps command shows the processes in execution. The x option allows to show all the processes of the current user. 
+ 
+### 6.	Another very important handler is the SIGPIPE signal, which, in the case of sockets, indicates that the connection has been broken (it receives an RST) . The SIGPIPE handler includes the code needed to treat this exception (increment the number of observed failures, try to re-establish the connection, close auxilliary descriptors that are no longer needed etc.). It must be specified both on the client and on the server side of the protocol.
+Include the SIGPIPE handler in the echo server, following the example of the SIGCHILD handler. Experiment with this modified code and note the occasions on which the execution of the handler can be observed. Note that:
 
-Prueba lo siguiente: compila dos instancias del servidor concurrente, uno con la llamada a
-signal y otro sin dicha llamada. ¿Qué diferencias observa entre ambas versiones
-examinando la tabla de procesos (con el comando ps x) después de que un cliente cierre
-su conexión? 
+```
+kill -l
+```
 
-NOTA: El comando ps nos permite ver los procesos que se están ejecutando. La opción x
-permite mostrar los procesos del usuario actual. 
+shows the available signals and
 
-Otro manejador muy importante es el de la señal SIGPIPE, que en el caso de sockets indica que
-la conexión se ha roto (recibe un RST). El manejador de SIGPIPE permite incluir el código
-necesario para tratar esta excepción (incrementar el número de fallos observados, intentar
-reestablecer la conexión, cerrar descriptores auxiliares que ya no son necesarios, etc.). Debe de
-estar especificado en el protocolo que siguen cliente y servidor. 
+```
+kill -signal pid
+```
 
-### 6. Incluya un manejador de SIGPIPE en el servidor de eco, siguiendo el ejemplo del manejador
-de SIGCHILD. Experimente y anote las ocasiones en que observa que se ejecuta el manejador. 
+sends the specified signal to the specified process.
 
-Usa `kill -l` para ver las señales disponibles y `kill -signal pid` para mandar la señal indicada al proceso especificado.
+You can use either `netstat -putan` or `ps aux` to find the process number (pid).
