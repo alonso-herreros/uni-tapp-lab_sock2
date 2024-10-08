@@ -137,7 +137,8 @@ main(int argc, char *argv[])
 						errexit("echo read: %s\n", strerror(errno));
 					/* print to console */	
 					printf("\tchild %d : receiving data: \n",getpid());	
-					write(0,buf,cc); /* stdin is the 0 file descriptor */
+					//write(0,buf,cc); /* stdin is the 0 file descriptor */
+					write(1,buf,cc); /* ... which is why we write to stdout */
 					/* write back to the client */		
 					if (write(asock, buf, cc) < 0)
 						errexit("echo write: %s\n", strerror(errno));
