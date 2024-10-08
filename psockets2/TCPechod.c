@@ -23,7 +23,11 @@
 extern int	errno;
 
 void	reaper(int);
+void	sigpipe_handler(int);
 int	errexit(const char *format, ...);
+
+int pipe_failure_count = 0;
+volatile int connection_needs_reset = 0; /* Flag in case... you get it */
 
 
 /*------------------------------------------------------------------------
@@ -96,10 +100,12 @@ main(int argc, char *argv[])
 		errexit("can't listen on %s port: %s\n", port,
 			strerror(errno));
 
-	/* SIGNAL HANDLER */
+	/* SIGNAL HANDLERS */
 #ifndef NOREAPER
 	(void) signal(SIGCHLD, reaper);
 #endif
+    /* We should not be getting any SIGPIPEs before this point... */
+	signal(SIGPIPE, sigpipe_handler);
 
 	while (1) { // This loop will run forever (1==true)
 		
@@ -174,5 +180,17 @@ void reaper(int sig)
 
 	while (wait3(&status, WNOHANG, (struct rusage *)0) >= 0)
 				/* empty */;
+}
+
+/**
+ * @brief Handle SIGPIPE
+ *
+ * @param sig The signal to be handled (expected sigpipe).
+ */
+void sigpipe_handler(int sig)
+{
+    /* It's not good to be here... */
+    printf("OOPS! Pipe failure #%d. Trying to recover.\n", ++pipe_failure_count);
+    connection_needs_reset = 1;
 }
 

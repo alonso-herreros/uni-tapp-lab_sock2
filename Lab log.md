@@ -198,3 +198,9 @@ When the server was killed as well, finally, the zombie child was cleared
 
 ```
 
+## 6. SIGPIPE handling
+
+What exactly I'm supposed to do here, I'm not sure. I added a handler to the
+server for SIGPIPE, which prints a message and sets some variables and flags,
+but after that...
+
