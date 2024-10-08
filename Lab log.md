@@ -113,3 +113,17 @@ Parent: Waiting for incomming connections at port 8990
 asdf from vit002
 ```
 
+## 4. Sequential server section 5 problem
+
+The sequential server from the previous lab had issues when two clients tried
+to connect simultaneously and send data. Only the first client to connect was
+able to send data, as the server was sequential and only attended one
+connection at a time. Furthermore, in section 6, if the second client was
+killed before the first, when the server tried to attend to that connection,
+as the second client was already dead, the connection was aborted, indicated
+by the reset frames observed. 
+
+In this case, the server can listen to and respond to two clients
+simultaneously, as it forks the main process in order to attend to both
+connections at the same time.
+

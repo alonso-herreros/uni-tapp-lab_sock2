@@ -1,0 +1,29 @@
+[2024-10-08, 17:36:16] tcpdump -l port 8990
+tcpdump: verbose output suppressed, use -v[v]... for full protocol decode
+listening on eth0, link-type EN10MB (Ethernet), snapshot length 262144 bytes
+17:36:47.531449 IP vit002.lab.it.uc3m.es.33014 > vit001.clc-build-daemon: Flags [S], seq 1990501130, win 64240, options [mss 1460,sackOK,TS val 1276411359 ecr 0], length 0
+17:36:47.531524 IP vit001.clc-build-daemon > vit002.lab.it.uc3m.es.33014: Flags [S.], seq 1167991038, ack 1990501131, win 65160, options [mss 1460,sackOK,TS val 1619778642 ecr 1276411359], length 0
+17:36:47.531673 IP vit002.lab.it.uc3m.es.33014 > vit001.clc-build-daemon: Flags [.], ack 1, win 64240, options [nop,nop,TS val 1276411359 ecr 1619778642], length 0
+17:36:50.151199 IP vit003.lab.it.uc3m.es.44330 > vit001.clc-build-daemon: Flags [S], seq 2057127100, win 64240, options [mss 1460,sackOK,TS val 1418900389 ecr 0], length 0
+17:36:50.151259 IP vit001.clc-build-daemon > vit003.lab.it.uc3m.es.44330: Flags [S.], seq 56444682, ack 2057127101, win 65160, options [mss 1460,sackOK,TS val 1526562628 ecr 1418900389], length 0
+17:36:50.151517 IP vit003.lab.it.uc3m.es.44330 > vit001.clc-build-daemon: Flags [.], ack 1, win 64240, options [nop,nop,TS val 1418900390 ecr 1526562628], length 0
+17:42:04.767157 IP vit002.lab.it.uc3m.es.33014 > vit001.clc-build-daemon: Flags [P.], seq 1:18, ack 1, win 64240, options [nop,nop,TS val 1276728594 ecr 1619778642], length 17
+17:42:04.767263 IP vit001.clc-build-daemon > vit002.lab.it.uc3m.es.33014: Flags [.], ack 18, win 65143, options [nop,nop,TS val 1620095877 ecr 1276728594], length 0
+17:42:04.767862 IP vit001.clc-build-daemon > vit002.lab.it.uc3m.es.33014: Flags [P.], seq 1:18, ack 18, win 65143, options [nop,nop,TS val 1620095878 ecr 1276728594], length 17
+17:42:04.768244 IP vit002.lab.it.uc3m.es.33014 > vit001.clc-build-daemon: Flags [.], ack 18, win 64223, options [nop,nop,TS val 1276728595 ecr 1620095878], length 0
+17:42:10.056804 IP vit003.lab.it.uc3m.es.44330 > vit001.clc-build-daemon: Flags [P.], seq 1:18, ack 1, win 64240, options [nop,nop,TS val 1419220295 ecr 1526562628], length 17
+17:42:10.056870 IP vit001.clc-build-daemon > vit003.lab.it.uc3m.es.44330: Flags [.], ack 18, win 65143, options [nop,nop,TS val 1526882534 ecr 1419220295], length 0
+17:42:10.057138 IP vit001.clc-build-daemon > vit003.lab.it.uc3m.es.44330: Flags [P.], seq 1:18, ack 18, win 65143, options [nop,nop,TS val 1526882534 ecr 1419220295], length 17
+17:42:10.057394 IP vit003.lab.it.uc3m.es.44330 > vit001.clc-build-daemon: Flags [.], ack 18, win 64223, options [nop,nop,TS val 1419220296 ecr 1526882534], length 0
+17:44:41.013660 IP vit001.clc-build-daemon > vit003.lab.it.uc3m.es.44330: Flags [F.], seq 18, ack 18, win 65143, options [nop,nop,TS val 1527033491 ecr 1419220296], length 0
+17:44:41.013825 IP vit001.clc-build-daemon > vit002.lab.it.uc3m.es.33014: Flags [F.], seq 18, ack 18, win 65143, options [nop,nop,TS val 1620252124 ecr 1276728595], length 0
+17:44:41.057560 IP vit002.lab.it.uc3m.es.33014 > vit001.clc-build-daemon: Flags [.], ack 19, win 64222, options [nop,nop,TS val 1276884885 ecr 1620252124], length 0
+17:44:41.057560 IP vit003.lab.it.uc3m.es.44330 > vit001.clc-build-daemon: Flags [.], ack 19, win 64222, options [nop,nop,TS val 1419371296 ecr 1527033491], length 0
+17:44:44.518002 IP vit002.lab.it.uc3m.es.33014 > vit001.clc-build-daemon: Flags [F.], seq 18, ack 19, win 64222, options [nop,nop,TS val 1276888345 ecr 1620252124], length 0
+17:44:44.518104 IP vit001.clc-build-daemon > vit002.lab.it.uc3m.es.33014: Flags [.], ack 19, win 65143, options [nop,nop,TS val 1620255628 ecr 1276888345], length 0
+17:44:46.112357 IP vit003.lab.it.uc3m.es.44330 > vit001.clc-build-daemon: Flags [F.], seq 18, ack 19, win 64222, options [nop,nop,TS val 1419376351 ecr 1527033491], length 0
+17:44:46.112405 IP vit001.clc-build-daemon > vit003.lab.it.uc3m.es.44330: Flags [.], ack 19, win 65143, options [nop,nop,TS val 1527038590 ecr 1419376351], length 0
+
+22 packets captured
+28 packets received by filter
+0 packets dropped by kernel
