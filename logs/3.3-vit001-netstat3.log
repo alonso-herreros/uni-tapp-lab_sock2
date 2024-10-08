@@ -1,0 +1,3 @@
+[2024-10-08, 13:21:02] netstat -ptan | grep ":8[0-9]\+"
+(No info could be read for "-p": geteuid()=493990 but you should be root.)
+tcp        0      0 163.117.171.191:831     163.117.168.100:2049    ESTABLISHED -                   

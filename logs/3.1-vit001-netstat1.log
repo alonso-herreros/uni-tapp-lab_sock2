@@ -1,0 +1,6 @@
+[2024-10-08, 13:15:23] netstat -ptan | grep ":8[0-9]\+"
+(Not all processes could be identified, non-owned process info
+ will not be shown, you would have to be root to see it all.)
+tcp        0      0 0.0.0.0:8990            0.0.0.0:*               LISTEN      151175/./TCPechod   
+tcp        0      0 163.117.171.191:8990    163.117.171.192:36030   ESTABLISHED 151197/./TCPechod   
+tcp        0      0 163.117.171.191:8990    163.117.171.193:38466   ESTABLISHED 183677/./TCPechod   

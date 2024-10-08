@@ -1,0 +1,10 @@
+[2024-10-08, 13:13:51] unbuffer tcpdump -U port 8990
+tcpdump: verbose output suppressed, use -v[v]... for full protocol decode
+listening on eth0, link-type EN10MB (Ethernet), snapshot length 262144 bytes
+13:13:53.275702 IP vit003.lab.it.uc3m.es.38466 > vit001.clc-build-daemon: Flags [S], seq 1077944686, win 64240, options [mss 1460,sackOK,TS val 1403123514 ecr 0], length 0
+13:13:53.275867 IP vit001.clc-build-daemon > vit003.lab.it.uc3m.es.38466: Flags [S.], seq 2705179966, ack 1077944687, win 65160, options [mss 1460,sackOK,TS val 1510785753 ecr 1403123514], length 0
+13:13:53.276234 IP vit003.lab.it.uc3m.es.38466 > vit001.clc-build-daemon: Flags [.], ack 1, win 64240, options [nop,nop,TS val 1403123515 ecr 1510785753], length 0
+13:14:00.168017 IP vit003.lab.it.uc3m.es.38466 > vit001.clc-build-daemon: Flags [P.], seq 1:18, ack 1, win 64240, options [nop,nop,TS val 1403130406 ecr 1510785753], length 17
+13:14:00.168118 IP vit001.clc-build-daemon > vit003.lab.it.uc3m.es.38466: Flags [.], ack 18, win 65143, options [nop,nop,TS val 1510792645 ecr 1403130406], length 0
+13:14:00.168394 IP vit001.clc-build-daemon > vit003.lab.it.uc3m.es.38466: Flags [P.], seq 1:18, ack 18, win 65143, options [nop,nop,TS val 1510792646 ecr 1403130406], length 17
+13:14:00.168840 IP vit003.lab.it.uc3m.es.38466 > vit001.clc-build-daemon: Flags [.], ack 18, win 64223, options [nop,nop,TS val 1403130407 ecr 1510792646], length 0
