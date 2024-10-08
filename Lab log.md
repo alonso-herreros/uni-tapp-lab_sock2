@@ -127,3 +127,74 @@ In this case, the server can listen to and respond to two clients
 simultaneously, as it forks the main process in order to attend to both
 connections at the same time.
 
+## 5. Test child reaping
+
+In order to compile two different version, the source code was modified to
+include some compiler macros which would optionally skip the relevant line.
+The Makefile was modified to add a target `noreaper` (not included in `all`)
+for this modified server with no call to the `reaper` function, and the
+target was executed.
+
+Then, each server was tested running on `vit001` and having a client connect
+from `vit002`. The process table was inspected before, during, and after each
+server test.
+
+### Test with child reaping
+
+Upon starting the server, the main process was shown:
+
+```txt
+[2024-10-08, 18:28:18] ps x | grep TCP | grep -v grep
+ 382270 pts/3    S+     0:00 ./TCPechod 8990
+```
+
+Upon a client connecting, a second process could be seen:
+
+```txt
+[2024-10-08, 18:29:01] ps x | grep TCP | grep -v grep
+ 382270 pts/3    S+     0:00 ./TCPechod 8990
+ 383033 pts/3    S+     0:00 ./TCPechod 8990
+```
+
+When the client disconnected, the second process died and only the parent
+remained.
+
+```txt
+[2024-10-08, 18:33:26] ps x | grep TCP | grep -v grep
+ 382270 pts/3    S+     0:00 ./TCPechod 8990
+```
+
+When the server was killed, no processes remained.
+
+### Test with no child reaping
+
+This server behaved similarly when starting
+
+```txt
+[2024-10-08, 18:38:14] ps x | grep TCP | grep -v grep
+ 390780 pts/3    S+     0:00 ./TCPechod_noreaper 8990
+```
+
+And also when a client was connected
+
+```txt
+[2024-10-08, 18:39:10] ps x | grep TCP | grep -v grep
+ 390780 pts/3    S+     0:00 ./TCPechod_noreaper 8990
+ 391438 pts/3    S+     0:00 ./TCPechod_noreaper 8990
+```
+
+But when the client disconnected, the non-reaping server had a zombie child
+
+```txt
+[2024-10-08, 18:39:32] ps x | grep TCP | grep -v grep
+ 390780 pts/3    S+     0:00 ./TCPechod_noreaper 8990
+ 391438 pts/3    Z+     0:00 [TCPechod_noreap] <defunct>
+```
+
+When the server was killed as well, finally, the zombie child was cleared
+
+```txt
+[2024-10-08, 18:39:50] ps x | grep TCP | grep -v grep
+
+```
+

@@ -1,0 +1,3 @@
+[2024-10-08, 18:39:32] ps x | grep TCP | grep -v grep
+ 390780 pts/3    S+     0:00 ./TCPechod_noreaper 8990
+ 391438 pts/3    Z+     0:00 [TCPechod_noreap] <defunct>

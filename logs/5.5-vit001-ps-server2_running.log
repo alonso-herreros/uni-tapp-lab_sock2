@@ -1,0 +1,2 @@
+[2024-10-08, 18:38:14] ps x | grep TCP | grep -v grep
+ 390780 pts/3    S+     0:00 ./TCPechod_noreaper 8990

@@ -1,0 +1,2 @@
+[2024-10-08, 18:28:18] ps x | grep TCP | grep -v grep
+ 382270 pts/3    S+     0:00 ./TCPechod 8990

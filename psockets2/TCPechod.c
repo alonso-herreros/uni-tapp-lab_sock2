@@ -97,7 +97,9 @@ main(int argc, char *argv[])
 			strerror(errno));
 
 	/* SIGNAL HANDLER */
+#ifndef NOREAPER
 	(void) signal(SIGCHLD, reaper);
+#endif
 
 	while (1) { // This loop will run forever (1==true)
 		

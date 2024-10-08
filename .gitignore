@@ -1,3 +1,4 @@
 *.o
-TCPechod
 TCPecho
+TCPechod
+TCPechod_noreaper
