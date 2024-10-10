@@ -27,7 +27,6 @@ void	sigpipe_handler(int);
 int	errexit(const char *format, ...);
 
 int pipe_failure_count = 0;
-volatile int connection_needs_reset = 0; /* Flag in case... you get it */
 
 
 /*------------------------------------------------------------------------
@@ -190,7 +189,6 @@ void reaper(int sig)
 void sigpipe_handler(int sig)
 {
     /* It's not good to be here... */
-    printf("OOPS! Pipe failure #%d. Trying to recover.\n", ++pipe_failure_count);
-    connection_needs_reset = 1;
+    printf("OOPS! Pipe failure number %d on process %d.\n", ++pipe_failure_count, getpid());
 }
 

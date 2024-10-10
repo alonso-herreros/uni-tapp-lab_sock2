@@ -1,0 +1,11 @@
+[2024-10-10, 17:49:19] ./TCPechod 8990
+Parent: Waiting for incomming connections at port 8990
+Parent: Incomming connection from 163.117.144.105 remote port 40732
+Parent: Waiting for incomming connections at port 8990
+OOPS! Pipe failure number 1 on process 1372280.
+OOPS! Pipe failure number 2 on process 1372280.
+OOPS! Pipe failure number 3 on process 1372280.
+OOPS! Pipe failure number 1 on process 1372276.
+	child 1372280 : receiving data: 
+asdf
+OOPS! Pipe failure number 4 on process 1372280.

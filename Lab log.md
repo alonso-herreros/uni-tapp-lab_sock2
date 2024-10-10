@@ -200,7 +200,28 @@ When the server was killed as well, finally, the zombie child was cleared
 
 ## 6. SIGPIPE handling
 
-What exactly I'm supposed to do here, I'm not sure. I added a handler to the
-server for SIGPIPE, which prints a message and sets some variables and flags,
-but after that...
+> **Note**
+>
+> This section was done in a separate session, and the machines used were
+> dfferent ones.
+
+The SIGPIPE handler was included, incrementing a volatile variable
+`pipe_failure_count`. When the parent or a child process were sent a SIGPIPE
+signal, they print out the number of failures observed in that process.
+
+```txt
+[2024-10-10, 17:49:19] ./TCPechod 8990
+Parent: Waiting for incomming connections at port 8990
+Parent: Incomming connection from 163.117.144.105 remote port 40732
+Parent: Waiting for incomming connections at port 8990
+OOPS! Pipe failure number 1 on process 1372280.
+OOPS! Pipe failure number 2 on process 1372280.
+OOPS! Pipe failure number 3 on process 1372280.
+OOPS! Pipe failure number 1 on process 1372276.
+	child 1372280 : receiving data: 
+asdf
+OOPS! Pipe failure number 4 on process 1372280.
+```
+
+Check the logs for more informaion.
 
